@@ -15,7 +15,7 @@ class VideoType extends AbstractType
         $builder
             ->add('source', TextType::class, [
                 'attr' => array(
-                    'class' => 'form-control mb-2',
+                    'class' => 'mb-2',
                     'placeholder' => 'URL youtube de la vidéo'
                 ),
                 'label' =>false

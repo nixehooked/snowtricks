@@ -1,0 +1,73 @@
+/* -- Accordion css
+-------------------------------------- -- */
+.faq {
+    padding-bottom: 2.7rem;
+}
+.accordion {
+    max-width: 102rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 3.1rem;
+
+    .card {
+        margin-bottom: 3rem;
+        border: 2px solid #f1f0ff;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .card-header {
+        background: transparent;
+        border: none;
+        padding: 0;
+
+        h6 {
+            margin: 0;
+        }
+
+        button {
+            width: 100%;
+            display: block;
+            background: transparent;
+            padding: 1.7rem 5rem 1.8rem 3rem;
+            text-align: left;
+            cursor: pointer;
+            position: relative;
+
+            &::after {
+                content: "\f1b9";
+                position: absolute;
+                top: 0;
+                right: 3rem;
+                font-family: 'miniline' !important;
+                font-size: 1.5rem;
+                font-weight: normal;
+                font-style: normal;
+                text-transform: none;
+                line-height: 6rem;
+                color: inherit;
+            }
+
+            &.collapsed {
+                &::after {
+                    content: "\f1b6";
+                }
+            }
+        }
+    }
+
+    .card-body {
+        padding: 0 5rem 0 3rem;
+        margin-top: -.8rem;
+
+        p {
+            font-size: 1.6rem;
+            line-height: 2.6rem;
+            margin-bottom: .8rem;
+
+            &:nth-last-of-type(1) {
+                margin-bottom: 1.6rem;
+            }
+        }
+    }
+}

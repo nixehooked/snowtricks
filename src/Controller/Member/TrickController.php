@@ -2,7 +2,9 @@
 
 namespace App\Controller\Member;
 
+use App\Entity\Comment;
 use App\Entity\Trick;
+use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
 use App\Services\ImageService;
@@ -12,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/ok")
+ * @Route("/")
  */
 class TrickController extends AbstractController
 {
@@ -21,13 +23,13 @@ class TrickController extends AbstractController
      */
     public function index(TrickRepository $trickRepository): Response
     {
-        return $this->render('trick/index.html.twig', [
+        return $this->render('Member/home/index.html.twig', [
             'tricks' => $trickRepository->findAll(),
         ]);
     }
 
     /**
-     * @Route("/new", name="trick_new", methods={"GET","POST"})
+     * @Route("trick/new", name="trick_new", methods={"GET","POST"})
      */
     public function new(Request $request, ImageService $imageService): Response
     {
@@ -53,19 +55,32 @@ class TrickController extends AbstractController
             return $this->redirectToRoute('trick_index');
         }
 
-        return $this->render('trick/new.html.twig', [
+        return $this->render('Member/trick/new.html.twig', [
             'trick' => $trick,
             'form' => $form->createView(),
         ]);
     }
 
+
+
     /**
-     * @Route("/{id}", name="trick_show", methods={"GET"})
+     * @Route("trick/{id}", name="trick_show", methods={"GET","POST"}, requirements={"id"="\d+"})
      */
-    public function show(Trick $trick): Response
+    public function show(Trick $trick, Request $request): Response
     {
-        return $this->render('trick/show.html.twig', [
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+        $user=$this->getUser();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setTrick($trick)->setUser($user);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($comment);
+            $entityManager->flush();
+        }
+        return $this->render('Member/trick/show.html.twig', [
             'trick' => $trick,
+            'form'=>$form->createView()
         ]);
     }
 
@@ -90,7 +105,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="trick_delete", methods={"DELETE"})
+     * @Route("trick/{id}", name="trick_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Trick $trick): Response
     {

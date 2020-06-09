@@ -1,0 +1,12 @@
+<div class="jumbotron">
+    {{ form_start(form) }}
+    <div class="form-group" id="comments-block">
+        {{ form_widget(form.content, {'attr': {'class': ''}}) }}
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-success btn-lg">Commenter</button>
+    </div>
+    {{ form_end(form) }}
+</div>
+
+

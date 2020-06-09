@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Trick{% endblock %}
+
+{% block body %}
+    <div class="inner-page-banner">
+        <div class="container text-center">
+            <h1>Ajouter un nouveau trick</h1>
+        </div>
+        <!-- End of .container -->
+    </div>
+
+    {{ include('Member/trick/_form.html.twig') }}
+
+    <a href="{{ path('trick_index') }}">back to list</a>
+{% endblock %}

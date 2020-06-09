@@ -1,0 +1,46 @@
+<!-- navbar starts
+    ======================================= -->
+<nav class="navbar navbar-expand-lg solid-bg">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">
+            <img src="{{ asset('images/brand-logo.png') }}" alt="Brand Logo" class="img-fluid">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            <span class="custom-toggler-icon bar1"></span>
+            <span class="custom-toggler-icon bar2"></span>
+            <span class="custom-toggler-icon bar3"></span>
+        </button>
+        <!-- End of .navbar-toggler -->
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-md-auto typo-color-c align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('trick_index') }}">
+                        Accueil
+                    </a>
+                </li>
+
+                {% if app.user %}
+                    <li class="nav-item">
+                        <a class="nav-link custom-btn btn-mid grad-style-cd" href="{{ path('app_logout') }}" >Deconnexion</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="blog.html">Insciption</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link custom-btn btn-mid grad-style-cd" href="blog.html">Connexion</a>
+                    </li>
+                {% endif %}
+
+            </ul>
+            <!-- End of .navbar-nav -->
+        </div>
+        <!-- End of .navbar-collapse -->
+    </div>
+    <!-- End of .container -->
+</nav>
+<!-- End of .navbar -->
+
