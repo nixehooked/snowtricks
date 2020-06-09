@@ -32,12 +32,12 @@ class Image
         return $this->id;
     }
 
-    public function getSource(): ?string
+    public function getSource()
     {
         return $this->source;
     }
 
-    public function setSource(string $source): self
+    public function setSource($source): self
     {
         $this->source = $source;
 

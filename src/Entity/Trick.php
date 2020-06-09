@@ -46,12 +46,12 @@ class Trick
     private $groups;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Image::class)
+     * @ORM\ManyToMany(targetEntity=Image::class, cascade={"persist"})
      */
     private $image;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Video::class)
+     * @ORM\ManyToMany(targetEntity=Video::class, cascade={"persist"})
      */
     private $video;
 
@@ -229,5 +229,10 @@ class Trick
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getName();
     }
 }
