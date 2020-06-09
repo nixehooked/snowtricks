@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% for trick in trick %}SnowTricks -{{ trick.name }}{% endfor %} {% endblock %}
+
+{% block body %}
+    <!-- Header starts
+    ======================================= -->
+    <div class="inner-page-banner">
+        <div class="container text-center">
+            <h1>{{ trick.name }}</h1>
+        </div>
+        <!-- End of .container -->
+    </div>
+    <section class="image-with-description">
+        <div class="trigger-image-with-description"></div>
+        <svg class="bg-shape image-with-description-shape-bg reveal-from-right" xmlns="http://www.w3.org/2000/svg"
+             xmlns:xlink="http://www.w3.org/1999/xlink" width="779px" height="759px">
+            <defs>
+                <linearGradient id="PSgrad_01" x1="70.711%" x2="0%" y1="70.711%" y2="0%">
+                    <stop offset="0%" stop-color="rgb(237,247,255)" stop-opacity="1" />
+                    <stop offset="100%" stop-color="rgb(237,247,255)" stop-opacity="0" />
+                </linearGradient>
+            </defs>
+            <path fill-rule="evenodd" fill="url(#PSgrad_01)" d="M111.652,578.171 L218.141,672.919 C355.910,795.500 568.207,784.561 692.320,648.484 C816.434,512.409 805.362,302.726 667.592,180.144 L561.104,85.396 C423.334,-37.184 211.037,-26.245 86.924,109.832 C-37.189,245.908 -26.118,455.590 111.652,578.171 Z" />
+        </svg>
+
+        <div class="container">
+            <div class="align-items-center image-with-description-block">
+                    <h2>Description</h2>
+                    <p>{{ trick.description }}</p>
+            </div>
+            <section class="align-items-center image-with-description-block">
+                <h2>Medias</h2>
+                <div class="media">
+                {% include'Member/trick/carousel.html.twig' %}
+                </div>
+            </section>
+
+            <!-- End of .row -->
+        </div>
+
+        <!-- End of .container -->
+    </section>
+    <div class="container">
+        <h2>Commentaires</h2>
+        {% if app.user %}
+            {% include'Member/trick/_comment-form.html.twig' %}
+        {% endif %}
+        {% for comment in trick.comments %}
+            {% include'Member/trick/_comments.html.twig' %}
+        {% endfor %}
+
+    </div>
+    <!-- End of .banner -->
+    {% for trick in trick %}
+
+<div class="container">
+    <main>
+
+        <!-- Start Trick -->
+
+        <section>
+            {% include'tricks/showTrick.html.twig' %}
+        </section>
+
+
+
+        <!-- Start Carousel -->
+
+
+
+        <!-- End Carousel -->
+
+        <!-- End Trick -->
+
+
+
+
+        <!-- Start Comment Add Form -->
+
+        <div class="container">
+            <div class="card mb-3">
+            <h4 class="card-header text-center">Commentaires</h4>
+
+
+            <!-- End Comment Add Form -->
+
+            <!-- Start Comments -->
+
+
+
+        </div>
+
+        <!-- End Comments -->
+        </div>
+    </main>
+</div>
+    {% endfor %}
+{% endblock %}

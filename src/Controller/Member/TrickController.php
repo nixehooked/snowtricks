@@ -2,17 +2,20 @@
 
 namespace App\Controller\Member;
 
+use App\Entity\Comment;
 use App\Entity\Trick;
+use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
 use App\Services\ImageService;
+use App\Services\VideoService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/ok")
+ * @Route("/")
  */
 class TrickController extends AbstractController
 {
@@ -21,15 +24,15 @@ class TrickController extends AbstractController
      */
     public function index(TrickRepository $trickRepository): Response
     {
-        return $this->render('trick/index.html.twig', [
+        return $this->render('Member/home/index.html.twig', [
             'tricks' => $trickRepository->findAll(),
         ]);
     }
 
     /**
-     * @Route("/new", name="trick_new", methods={"GET","POST"})
+     * @Route("trick/new", name="trick_new", methods={"GET","POST"})
      */
-    public function new(Request $request, ImageService $imageService): Response
+    public function new(Request $request, ImageService $imageService, VideoService $videoService): Response
     {
         $trick = new Trick();
         $user=$this->getUser();
@@ -42,10 +45,7 @@ class TrickController extends AbstractController
             {
                 $imageService->upload($trick, $image);
             }
-            foreach ($trick->getVideo() as $video)
-            {
-                $entityManager->persist($video);
-            }
+            $videoService->addVideo($trick, $entityManager);
             $trick->setUser($user);
             $entityManager->persist($trick);
             $entityManager->flush();
@@ -53,44 +53,82 @@ class TrickController extends AbstractController
             return $this->redirectToRoute('trick_index');
         }
 
-        return $this->render('trick/new.html.twig', [
+        return $this->render('Member/trick/new.html.twig', [
             'trick' => $trick,
             'form' => $form->createView(),
         ]);
     }
 
+
+
     /**
-     * @Route("/{id}", name="trick_show", methods={"GET"})
+     * @Route("trick/{id}", name="trick_show", methods={"GET","POST"}, requirements={"id"="\d+"})
      */
-    public function show(Trick $trick): Response
+    public function show(Trick $trick, Request $request): Response
     {
-        return $this->render('trick/show.html.twig', [
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+        $user=$this->getUser();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setTrick($trick)->setUser($user);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($comment);
+            $entityManager->flush();
+        }
+        return $this->render('Member/trick/show.html.twig', [
             'trick' => $trick,
+            'form'=>$form->createView()
         ]);
     }
 
     /**
      * @Route("/{id}/edit", name="trick_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Trick $trick): Response
+    public function edit(Request $request, Trick $trick, ImageService $imageService, VideoService $videoService): Response
     {
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $entityManager = $this->getDoctrine()->getManager();
+            $isImage=false;
+            foreach ($trick->getImage() as $image){
+                if($image->getSource()!=null){
+                    $isImage=true;
+                }
+            }
+            if ($isImage){
+                foreach ($trick->getImage() as $image)
+                {
+                    $imageService->upload($trick, $image);
+                }
+            }else{
+                $i=1;
+                foreach ($trick->getImage() as $image){
+                    $source = $request->request->get($i);
+                    $image->setSource($source);
+                    $image->setAlternatif($trick->getName());
+                    $i++;
 
+                }
+
+            }
+            $videoService->addVideo($trick, $entityManager);
+            $entityManager->persist($trick);
+            $entityManager->flush();
             return $this->redirectToRoute('trick_index');
+
         }
 
-        return $this->render('trick/edit.html.twig', [
+        return $this->render('Member/trick/edit.html.twig', [
             'trick' => $trick,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}", name="trick_delete", methods={"DELETE"})
+     * @Route("trick/{id}", name="trick_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Trick $trick): Response
     {

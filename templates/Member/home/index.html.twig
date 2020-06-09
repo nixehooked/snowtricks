@@ -1,0 +1,76 @@
+{% extends 'base-index.html.twig' %}
+{% block body %}
+    {% include 'Member/home/_slider.html.twig' %}
+    <!-- header -->
+    <div class="container">
+        <h2 class="text-center">Les tricks</h2>
+        <p class="section-subheading text-center">
+            Voir la liste complète de tous els tricks de la communauté
+        </p>
+
+        <div class="featured-project-showcase text-center">
+            <div class="row equalHeightWrapper">
+
+                {% set nb = 1 %}
+                {% for trick in tricks %}
+                    {% set defaultimage="" %}
+                    {% set defaultsource="" %}
+                    {% for img in trick.image|slice(0,1) %}
+                        {% set defaultimage=img.source %}
+                    {% endfor %}
+                    {% for img in trick.image|slice(0,1) %}
+                        {% set defaultsource=img.alternatif %}
+                    {% endfor %}
+                    <div class="grid-item col-md-6 col-lg-4 trick {{ nb <= 6 ? 'd-block' : ''}}" id="card_{{ nb }}">
+                        <div class="featured-content-block content-block" data-toggle="modal" data-target="#featured-project-modal">
+                            <div class="img-container">
+                                <img style="height: 150px; width: 100%" src="{{ asset('images/'~defaultimage )}}" alt="{{ defaultsource }}"  class="img-fluid">
+                            </div>
+                            <!-- End of .img-container -->
+                            <h5 class="equalHeight">
+                                <span class="content-block__sub-title">{{ trick.name }}</span>
+                                {{ trick.name }}
+                            </h5>
+                            <div class="row align-items-center ml-4">
+                                <a href="{{ path('trick_show', {'id': trick.id}) }}" class="btn btn-primary mt-2 mr-2"><i class="fa fa-eye"></i></a>
+                                {% if app.user %}
+                                    <a href="{{ path('trick_edit', {'id': trick.id}) }}" class="btn btn-secondary mt-2 mr-2"><i class="fa fa-edit"></i></a>
+                                    {{ include('Member/trick/_delete_form.html.twig') }}
+                                {% endif %}
+                            </div>
+                            <br/>
+
+                        </div>
+
+                        <!-- End of .featured-content-block -->
+                    </div>
+                    {% set nb = nb+1 %}
+                {% endfor %}
+
+                <!-- End of .grid-item -->
+            </div>
+            <!-- End of .grid -->
+            <button id="loadMoreTrick" class="custom-btn btn-big grad-style-ef btn-full">Afficher plus</button>
+        </div>
+        <!-- End of .template-showcase -->
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+
+        document.addEventListener("DOMContentLoaded", () => {
+            $("#loadMoreTrick").on("click", () => {
+                let visible_card = $(".col-md-4.d-block");
+                let last_card_visible = $(visible_card[visible_card.length - 1]).attr("id");
+                let tmp = last_card_visible.split("_")[1];
+                for (let i = tmp++; i < tmp + 6; i++) {
+
+                    let current_card = $("#card_" + i);
+                    current_card.fadeIn("slow");
+
+                }
+            })
+        })
+
+    </script>
+{% endblock %}
