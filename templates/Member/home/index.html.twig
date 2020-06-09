@@ -21,7 +21,7 @@
                     {% for img in trick.image|slice(0,1) %}
                         {% set defaultsource=img.alternatif %}
                     {% endfor %}
-                    <div class="grid-item col-md-6 col-lg-4">
+                    <div class="grid-item col-md-6 col-lg-4 trick {{ nb <= 6 ? 'd-block' : ''}}" id="card_{{ nb }}">
                         <div class="featured-content-block content-block" data-toggle="modal" data-target="#featured-project-modal">
                             <div class="img-container">
                                 <img style="height: 150px; width: 100%" src="{{ asset('images/'~defaultimage )}}" alt="{{ defaultsource }}"  class="img-fluid">
@@ -31,14 +31,14 @@
                                 <span class="content-block__sub-title">{{ trick.name }}</span>
                                 {{ trick.name }}
                             </h5>
-                            <div class="btn-group">
-                                <a href="{{ path('trick_show', {'id': trick.id}) }}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                            <div class="row align-items-center ml-4">
+                                <a href="{{ path('trick_show', {'id': trick.id}) }}" class="btn btn-primary mt-2 mr-2"><i class="fa fa-eye"></i></a>
                                 {% if app.user %}
-                                    <a href="{{ path('trick_edit', {'id': trick.id}) }}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
+                                    <a href="{{ path('trick_edit', {'id': trick.id}) }}" class="btn btn-secondary mt-2 mr-2"><i class="fa fa-edit"></i></a>
                                     {{ include('Member/trick/_delete_form.html.twig') }}
                                 {% endif %}
                             </div>
-                            <br/><br/>
+                            <br/>
 
                         </div>
 

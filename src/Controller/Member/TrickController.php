@@ -8,6 +8,7 @@ use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
 use App\Services\ImageService;
+use App\Services\VideoService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +32,7 @@ class TrickController extends AbstractController
     /**
      * @Route("trick/new", name="trick_new", methods={"GET","POST"})
      */
-    public function new(Request $request, ImageService $imageService): Response
+    public function new(Request $request, ImageService $imageService, VideoService $videoService): Response
     {
         $trick = new Trick();
         $user=$this->getUser();
@@ -44,10 +45,7 @@ class TrickController extends AbstractController
             {
                 $imageService->upload($trick, $image);
             }
-            foreach ($trick->getVideo() as $video)
-            {
-                $entityManager->persist($video);
-            }
+            $videoService->addVideo($trick, $entityManager);
             $trick->setUser($user);
             $entityManager->persist($trick);
             $entityManager->flush();
@@ -87,18 +85,43 @@ class TrickController extends AbstractController
     /**
      * @Route("/{id}/edit", name="trick_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Trick $trick): Response
+    public function edit(Request $request, Trick $trick, ImageService $imageService, VideoService $videoService): Response
     {
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $entityManager = $this->getDoctrine()->getManager();
+            $isImage=false;
+            foreach ($trick->getImage() as $image){
+                if($image->getSource()!=null){
+                    $isImage=true;
+                }
+            }
+            if ($isImage){
+                foreach ($trick->getImage() as $image)
+                {
+                    $imageService->upload($trick, $image);
+                }
+            }else{
+                $i=1;
+                foreach ($trick->getImage() as $image){
+                    $source = $request->request->get($i);
+                    $image->setSource($source);
+                    $image->setAlternatif($trick->getName());
+                    $i++;
 
+                }
+
+            }
+            $videoService->addVideo($trick, $entityManager);
+            $entityManager->persist($trick);
+            $entityManager->flush();
             return $this->redirectToRoute('trick_index');
+
         }
 
-        return $this->render('trick/edit.html.twig', [
+        return $this->render('Member/trick/edit.html.twig', [
             'trick' => $trick,
             'form' => $form->createView(),
         ]);
