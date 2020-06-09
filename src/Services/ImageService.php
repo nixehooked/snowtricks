@@ -6,9 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ImageService extends AbstractController
 {
-    public function upload($trick, $image){
+    public function upload($entity, $image){
         $file=$image->getSource();
-        $filename=$trick->getName();
+        $filename=$entity>getName();
         $filename= str_replace(' ', '', $filename);
         $unwanted_array = array(    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
             'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
@@ -29,7 +29,7 @@ class ImageService extends AbstractController
 
         }
         $image->setSource($filename);
-        $image->setAlternatif($trick->getName());
+        $image->setAlternatif($entity->getName());
 
     }
 }
