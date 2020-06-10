@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdminController!{% endblock %}
+
+{% block body %}
+<!-- Header starts
+    ======================================= -->
+<div class="inner-page-banner">
+    <div class="container text-center">
+        <h1>Gestion des utilisateurs</h1>
+    </div>
+    <!-- End of .container -->
+</div>
+<section class="case-studies-grid-wrapper section-padding">
+    <svg class="bg-shape shape-case-study reveal-from-left" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+         width="779px" height="759px">
+        <defs>
+            <linearGradient id="PSgrad_03" x1="70.711%" x2="0%" y1="70.711%" y2="0%">
+                <stop offset="0%" stop-color="rgb(237,247,255)" stop-opacity="1" />
+                <stop offset="100%" stop-color="rgb(237,247,255)" stop-opacity="0" />
+            </linearGradient>
+
+        </defs>
+        <path fill-rule="evenodd" fill="url(#PSgrad_03)" d="M111.652,578.171 L218.141,672.919 C355.910,795.500 568.207,784.561 692.320,648.484 C816.434,512.409 805.362,302.726 667.592,180.144 L561.104,85.396 C423.334,-37.184 211.037,-26.245 86.924,109.832 C-37.189,245.908 -26.118,455.590 111.652,578.171 Z"
+        />
+    </svg>
+    <div class="container">
+        <a href="" class="btn btn-big btn-secondary float-right">Promote ADMIN</a>
+        <table class="table table-hover table-responsive-sm table-bordered">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ user.id }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ user.email }}</td>
+                </tr>
+                <tr>
+                    <th>Roles</th>
+                    <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Surname</th>
+                    <td>{{ user.surname }}</td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <td>{{ user.name }}</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <a href="{{ path('admin_user_index') }}">back to list</a>
+    </div>
+</section>
+
+{% endblock %}

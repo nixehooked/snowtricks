@@ -19,6 +19,16 @@ class TrickRepository extends ServiceEntityRepository
         parent::__construct($registry, Trick::class);
     }
 
+    public function getVisibleTrick(){
+        return $this->createQueryBuilder('t')
+            ->where('t.is_Active=true')
+            ->leftJoin('t.user','u')->addSelect('u')
+            ->leftJoin('t.groups','g')->addSelect('g')
+            ->leftJoin('t.image','i')->addSelect('i')
+            ->leftJoin('t.video','v')->addSelect('v')
+            ->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Trick[] Returns an array of Trick objects
     //  */

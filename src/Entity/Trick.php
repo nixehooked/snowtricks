@@ -62,12 +62,18 @@ class Trick
      */
     private $groups;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $is_Active;
+
     public function __construct()
     {
         $this->image = new ArrayCollection();
         $this->video = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->created_At=new \DateTime();
+        $this->is_Active=false;
     }
 
     public function getId(): ?int
@@ -221,6 +227,18 @@ class Trick
     public function setGroups(?Group $groups): self
     {
         $this->groups = $groups;
+
+        return $this;
+    }
+
+    public function getIsActive(): ?bool
+    {
+        return $this->is_Active;
+    }
+
+    public function setIsActive(?bool $is_Active): self
+    {
+        $this->is_Active = $is_Active;
 
         return $this;
     }

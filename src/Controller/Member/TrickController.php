@@ -28,7 +28,7 @@ class TrickController extends AbstractController
     public function index(TrickRepository $trickRepository): Response
     {
         return $this->render('Member/home/index.html.twig', [
-            'tricks' => $trickRepository->findAll(),
+            'tricks' => $trickRepository->getVisibleTrick(),
         ]);
     }
 
@@ -47,7 +47,7 @@ class TrickController extends AbstractController
             $files=$form->get('image')->getData();
 
             foreach ($files as $image){
-                $imageService->upload($trick, $image);
+               $trick->addImage($imageService->upload($trick, $image));
             }
             $videoService->addVideo($trick, $entityManager);
             $trick->setUser($user);
@@ -103,7 +103,7 @@ class TrickController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $files=$form->get('image')->getData();
                 foreach ($files as $image){
-                    $imageService->upload($trick, $image);
+                    $trick->addImage($imageService->upload($trick, $image));
                 }
                 $videoService->addVideo($trick, $entityManager);
                 $entityManager->persist($trick);

@@ -31,7 +31,8 @@ class ImageService extends AbstractController
         $image=new Image();
         $image->setSource($filename);
         $image->setAlternatif($entity->getName());
-        $entity->addImage($image);
+        return $image;
+
 
     }
 }
