@@ -3,6 +3,7 @@
 namespace App\Controller\Member;
 
 use App\Entity\Comment;
+use App\Entity\Image;
 use App\Entity\Trick;
 use App\Form\CommentType;
 use App\Form\TrickType;
@@ -10,6 +11,7 @@ use App\Repository\TrickRepository;
 use App\Services\ImageService;
 use App\Services\VideoService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -41,8 +43,9 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            foreach ($trick->getImage() as $image)
-            {
+            $files=$form->get('image')->getData();
+
+            foreach ($files as $image){
                 $imageService->upload($trick, $image);
             }
             $videoService->addVideo($trick, $entityManager);
@@ -92,27 +95,9 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $isImage=false;
-            foreach ($trick->getImage() as $image){
-                if($image->getSource()!=null){
-                    $isImage=true;
-                }
-            }
-            if ($isImage){
-                foreach ($trick->getImage() as $image)
-                {
-                    $imageService->upload($trick, $image);
-                }
-            }else{
-                $i=1;
-                foreach ($trick->getImage() as $image){
-                    $source = $request->request->get($i);
-                    $image->setSource($source);
-                    $image->setAlternatif($trick->getName());
-                    $i++;
-
-                }
-
+            $files=$form->get('image')->getData();
+            foreach ($files as $image){
+                $imageService->upload($trick, $image);
             }
             $videoService->addVideo($trick, $entityManager);
             $entityManager->persist($trick);
@@ -136,6 +121,25 @@ class TrickController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($trick);
             $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('trick_index');
+    }
+    /**
+     * @Route("image/{id}/delete", name="imaage_delete")
+     */
+    public function deleteImage(Request $request, Image $image): Response
+    {
+        $data=json_decode($request->getContent(), true);
+        if ($this->isCsrfTokenValid('delete'.$image->getId(), $data['_token'])) {
+            $nom=$image->getSource();
+            unlink($this->getParameter('images_directory').'/'.$nom);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($image);
+            $entityManager->flush();
+            return new JsonResponse(['success'=>1]);
+        }else{
+            return new JsonResponse(['error'=>'Token invalid'],400);
         }
 
         return $this->redirectToRoute('trick_index');

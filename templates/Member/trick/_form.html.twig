@@ -19,6 +19,10 @@
             text-align:right;
             display:block;
         }
+        .image-thumbnail{
+            width: 100px;
+            height: 100px;
+        }
 
     </style>
 {% endblock %}
@@ -28,34 +32,44 @@
 
     <div class="form-group">
         <label for="name">Nom du Trick</label>
-        {{ form_widget(form.name, {'attr':{'class':''}}) }}
+        {{ form_widget(form.name, {'attr':{'class':'form-control form-control-lg'}}) }}
     </div>
     <div class="form-group">
         <label for="name">Description</label>
-        {{ form_widget(form.description, {'attr':{'class':''}}) }}
+        {{ form_widget(form.description, {'attr':{'class':'form-control form-control-lg'}}) }}
     </div>
     <div class="form-group">
         <label for="name">Groupe</label>
-        {{ form_widget(form.groups, {'attr':{'class':''}}) }}
+        {{ form_widget(form.groups, {'attr':{'class':'form-control form-control-lg p-2'}}) }}
+    </div>
+    <div class="form-group">
+        <label for="name">Images</label>
+
+            {% if(trick.image) %}
+            <div class="row">
+                {% for image in  trick.image %}
+                    <div class="col-3 border p-5 text-center">
+                        <img src="{{ "../images/"~image.source }}" alt="{{ image.alternatif }}" class="image-thumbnail">
+                        <a href="{{ path('imaage_delete',{'id':image.id}) }}" data-delete data-token="{{ csrf_token('delete'~image.id) }}"><i class="fa fa-trash text-danger"></i></a>
+                    </div>
+                {% endfor %}
+            </div>
+                {% set i=1 %}
+                {% for image in trick.image %}
+                    <input type="hidden" value="{{ image.source }}" name="{{ i }}">
+                    {% set i=i+1 %}
+                {% endfor %}
+            {% endif %}
+
+        {{ form_widget(form.image, {'attr':{'class':'form-control form-control-lg mt-2'}}) }}
     </div>
     <div class="form-row">
         <div id="simpleform" class="form-group col-6 card-header p-2">
             {{ form_widget(form.video) }}
             <a href="#" id="add_video" class="btn btn-success float-right">Ajouter une vidéo</a>
         </div>
-        <div id="simpleform" class="form-group col-6 card-header p-2">
-            {{ form_widget(form.image) }}
-            <a href="#" id="add_image" class="btn btn-success float-right">Ajouter une image</a>
-            <div class="preview-0"></div>
-        </div>
     </div>
-    {% if(trick.image) %}
-        {% set i=1 %}
-        {% for image in trick.image %}
-            <input type="hidden" value="{{ image.source }}" name="{{ i }}">
-            {% set i=i+1 %}
-        {% endfor %}
-    {% endif %}
+
     <div class="form-group">
         <button class="btn btn-warning btn-lg mt-2">{{ button_label|default('Enregistrer') }}</button>
     </div>
@@ -106,61 +120,32 @@
         }
     });
 </script>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
-        var $container = $('div#trick_image');
-        // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
-        var index = $container.find(':input').length;
-        // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
-        $('#add_image').click(function(e) {
-            addImage($container);
-            e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-            return false;
-        });
-        // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un (cas d'une nouvelle annonce par exemple).
-        if (index == 0) {
-            addImage($container);
-        } else {
-            // S'il existe déjà des catégories, on ajoute un lien de suppression pour chacune d'entre elles
-            $container.children('div').each(function() {
-                addDeleteLink($(this));
-            });
-        }
-        // La fonction qui ajoute un formulaire CategoryType
-        function addImage($container) {
-            // Dans le contenu de l'attribut « data-prototype », on remplace :
-            // - le texte "__name__label__" qu'il contient par le label du champ
-            // - le texte "__name__" qu'il contient par le numéro du champ
-            //console.log($container.attr('data-prototype'));
-            var template = $container.attr('data-prototype')
-                .replace(/__name__label__/g, 'Image n°' + (index+1))
-                .replace(/__name__/g,        index)
-            ;
-            // On crée un objet jquery qui contient ce template
-            var $prototype = $(template);
-            // On ajoute au prototype un lien pour pouvoir supprimer la catégorie
-            addDeleteLink($prototype);
-            // On ajoute le prototype modifié à la fin de la balise <div>
-            $container.append($prototype);
-            // Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
-            index++;
-        }
-        // La fonction qui ajoute un lien de suppression d'une catégorie
-        function addDeleteLink($prototype) {
-            // Création du lien
-            var $deleteLink = $('<a href="#" class="btn btn-danger mt-2">Supprimer</a>');
-            // Ajout du lien
-            $prototype.append($deleteLink);
-            // Ajout du listener sur le clic du lien pour effectivement supprimer la catégorie
-            $deleteLink.click(function(e) {
-                $prototype.remove();
-                e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-                return false;
-            });
-        }
-    });
+<script>
+    let links=document.querySelectorAll("[data-delete]");
+    for(link of links){
+        link.addEventListener('click', function(e){
+            e.preventDefault();
+            if(confirm("Voulez-vous supprimer cet image")){
+                fetch(this.getAttribute("href"),{
+                    method:"DELETE",
+                    headers:{
+                        "X-Requested-With":"XMLHttpRequest",
+                        "Content-Type":"application/json"
+                    },
+                    body: JSON.stringify({"_token": this.dataset.token})
+                }).then(
+                    response=>response.json()
+                ).then(data=>{
+                    if(data.success){
+                       this.parentElement.remove();
+                    }else{
+                        alert(data.error)
+                    }
+                }).catch(e=>alert(e))
+            }
+        })
+    }
 </script>
+
 
 {{ form_end(form) }}

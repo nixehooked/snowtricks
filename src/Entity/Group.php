@@ -36,9 +36,11 @@ class Group
     private $created_At;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Trick::class, mappedBy="groups")
+     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="groups")
      */
     private $tricks;
+
+
 
     public function __construct()
     {
@@ -87,6 +89,12 @@ class Group
         return $this;
     }
 
+
+    public function __toString()
+    {
+        return $this->getName();
+    }
+
     /**
      * @return Collection|Trick[]
      */
@@ -99,7 +107,7 @@ class Group
     {
         if (!$this->tricks->contains($trick)) {
             $this->tricks[] = $trick;
-            $trick->addGroup($this);
+            $trick->setGroups($this);
         }
 
         return $this;
@@ -109,14 +117,12 @@ class Group
     {
         if ($this->tricks->contains($trick)) {
             $this->tricks->removeElement($trick);
-            $trick->removeGroup($this);
+            // set the owning side to null (unless already changed)
+            if ($trick->getGroups() === $this) {
+                $trick->setGroups(null);
+            }
         }
 
         return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->getName();
     }
 }

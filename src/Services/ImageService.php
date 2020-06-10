@@ -1,13 +1,13 @@
 <?php
 
 namespace App\Services;
+use App\Entity\Image;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ImageService extends AbstractController
 {
     public function upload($entity, $image){
-        $file=$image->getSource();
         $filename=$entity->getName();
         $filename= str_replace(' ', '', $filename);
         $unwanted_array = array(    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
@@ -16,10 +16,10 @@ class ImageService extends AbstractController
             'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
             'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y' );
         $filename = strtr( $filename, $unwanted_array );
-        $filename=$filename."_".md5(uniqid()).".".$file->guessExtension();
-        if($file){
+        $filename=$filename."_".md5(uniqid()).".".$image->guessExtension();
+        if($image){
             try {
-                $file->move(
+                $image->move(
                     $this->getParameter('images_directory'),
                     $filename
                 );
@@ -28,8 +28,10 @@ class ImageService extends AbstractController
             }
 
         }
+        $image=new Image();
         $image->setSource($filename);
         $image->setAlternatif($entity->getName());
+        $entity->addImage($image);
 
     }
 }

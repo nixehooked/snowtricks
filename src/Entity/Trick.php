@@ -40,10 +40,7 @@ class Trick
      */
     private $created_At;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Group::class, inversedBy="tricks")
-     */
-    private $groups;
+
 
     /**
      * @ORM\ManyToMany(targetEntity=Image::class, cascade={"persist"})
@@ -60,9 +57,13 @@ class Trick
      */
     private $comments;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="tricks")
+     */
+    private $groups;
+
     public function __construct()
     {
-        $this->groups = new ArrayCollection();
         $this->image = new ArrayCollection();
         $this->video = new ArrayCollection();
         $this->comments = new ArrayCollection();
@@ -122,31 +123,7 @@ class Trick
         return $this;
     }
 
-    /**
-     * @return Collection|Group[]
-     */
-    public function getGroups(): Collection
-    {
-        return $this->groups;
-    }
 
-    public function addGroup(Group $group): self
-    {
-        if (!$this->groups->contains($group)) {
-            $this->groups[] = $group;
-        }
-
-        return $this;
-    }
-
-    public function removeGroup(Group $group): self
-    {
-        if ($this->groups->contains($group)) {
-            $this->groups->removeElement($group);
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|Image[]
@@ -234,5 +211,17 @@ class Trick
     public function __toString()
     {
         return $this->getName();
+    }
+
+    public function getGroups(): ?Group
+    {
+        return $this->groups;
+    }
+
+    public function setGroups(?Group $groups): self
+    {
+        $this->groups = $groups;
+
+        return $this;
     }
 }
