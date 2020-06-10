@@ -20,7 +20,7 @@ class GroupController extends AbstractController
      */
     public function index(GroupRepository $groupRepository): Response
     {
-        return $this->render('admin/group/index.html.twig', [
+        return $this->render('Admin/group/index.html.twig', [
             'groups' => $groupRepository->findAll(),
         ]);
     }
@@ -42,7 +42,7 @@ class GroupController extends AbstractController
             return $this->redirectToRoute('group_index');
         }
 
-        return $this->render('admin/group/new.html.twig', [
+        return $this->render('Admin/group/new.html.twig', [
             'group' => $group,
             'form' => $form->createView(),
         ]);

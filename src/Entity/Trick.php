@@ -73,7 +73,7 @@ class Trick
         $this->video = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->created_At=new \DateTime();
-        $this->is_Active=false;
+        $this->is_Active=true;
     }
 
     public function getId(): ?int
