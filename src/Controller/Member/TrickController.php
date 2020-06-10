@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @Route("/")
@@ -86,30 +87,37 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="trick_edit", methods={"GET","POST"})
+     * @Route("trick/{id}/edit", name="trick_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Trick $trick, ImageService $imageService, VideoService $videoService): Response
     {
-        $form = $this->createForm(TrickType::class, $trick);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $files=$form->get('image')->getData();
-            foreach ($files as $image){
-                $imageService->upload($trick, $image);
+        if($this->getUser()!=$trick->getUser()) {
+            throw $this->createNotFoundException('Vous ne pouvez pas modifier ce trick');
+        }
+        else{
+            $form = $this->createForm(TrickType::class, $trick);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $files=$form->get('image')->getData();
+                foreach ($files as $image){
+                    $imageService->upload($trick, $image);
+                }
+                $videoService->addVideo($trick, $entityManager);
+                $entityManager->persist($trick);
+                $entityManager->flush();
+                return $this->redirectToRoute('trick_index');
+
             }
-            $videoService->addVideo($trick, $entityManager);
-            $entityManager->persist($trick);
-            $entityManager->flush();
-            return $this->redirectToRoute('trick_index');
 
+            return $this->render('Member/trick/edit.html.twig', [
+                'trick' => $trick,
+                'form' => $form->createView(),
+            ]);
         }
 
-        return $this->render('Member/trick/edit.html.twig', [
-            'trick' => $trick,
-            'form' => $form->createView(),
-        ]);
     }
 
     /**
@@ -117,13 +125,16 @@ class TrickController extends AbstractController
      */
     public function delete(Request $request, Trick $trick): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$trick->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($trick);
-            $entityManager->flush();
+        if($this->getUser()!=$trick->getUser()) {
+            throw $this->createNotFoundException('Vous ne pouvez pas modifier ce trick');
+        }
+        else if ($this->isCsrfTokenValid('delete'.$trick->getId(), $request->request->get('_token'))) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($trick);
+                $entityManager->flush();
+            return $this->redirectToRoute('trick_index');
         }
 
-        return $this->redirectToRoute('trick_index');
     }
     /**
      * @Route("image/{id}/delete", name="imaage_delete")
