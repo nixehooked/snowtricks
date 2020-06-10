@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6ef53560-bd4e-46bc-a2a5-4fa3a1bcf632" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/Admin/AdminController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Admin/AdminController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/Admin/GroupController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/Admin/GroupController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Trick.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Trick.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Migrations/Version20200609114445.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Migrations/Version20200609130752.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Migrations/Version20200610044856.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Migrations/Version20200610093836.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Admin/group/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Admin/group/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Admin/group/new.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Admin/group/new.html.twig" afterDir="false" />
-    </list>
+    <list default="true" id="6ef53560-bd4e-46bc-a2a5-4fa3a1bcf632" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -304,7 +293,7 @@
       <path value="$PROJECT_DIR$/vendor/symfony/apache-pack" />
     </include_path>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-98" />
     <option name="y" value="-18" />
     <option name="width" value="1145" />
@@ -466,15 +455,15 @@
       <updated>1591699231416</updated>
       <workItem from="1591699232676" duration="9722000" />
       <workItem from="1591715816457" duration="16099000" />
-      <workItem from="1591737503252" duration="26121000" />
+      <workItem from="1591737503252" duration="26274000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="51942000" />
+    <option name="totallyTimeSpent" value="52095000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.3261745" />
