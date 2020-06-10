@@ -49,7 +49,7 @@
             <div class="row">
                 {% for image in  trick.image %}
                     <div class="col-3 col-xs-6 border p-5 text-center">
-                        <img src="{{ "../images/"~image.source }}" alt="{{ image.alternatif }}" class="image-thumbnail">
+                        <img src="{{ "../../images/"~image.source }}" alt="{{ image.alternatif }}" class="image-thumbnail">
                         <a href="{{ path('imaage_delete',{'id':image.id}) }}" data-delete data-token="{{ csrf_token('delete'~image.id) }}" class="rounded"><i class="fa fa-trash text-danger"></i></a>
                     </div>
                 {% endfor %}
