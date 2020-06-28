@@ -52,10 +52,7 @@ class Trick
      */
     private $video;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", orphanRemoval=true)
-     */
-    private $comments;
+
 
     /**
      * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="tricks")
@@ -66,6 +63,11 @@ class Trick
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $is_Active;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", orphanRemoval=true)
+     */
+    private $comments;
 
     public function __construct()
     {
@@ -183,6 +185,36 @@ class Trick
         return $this;
     }
 
+
+    public function __toString()
+    {
+        return $this->getName();
+    }
+
+    public function getGroups(): ?Group
+    {
+        return $this->groups;
+    }
+
+    public function setGroups(?Group $groups): self
+    {
+        $this->groups = $groups;
+
+        return $this;
+    }
+
+    public function getIsActive(): ?bool
+    {
+        return $this->is_Active;
+    }
+
+    public function setIsActive(?bool $is_Active): self
+    {
+        $this->is_Active = $is_Active;
+
+        return $this;
+    }
+
     /**
      * @return Collection|Comment[]
      */
@@ -210,35 +242,6 @@ class Trick
                 $comment->setTrick(null);
             }
         }
-
-        return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->getName();
-    }
-
-    public function getGroups(): ?Group
-    {
-        return $this->groups;
-    }
-
-    public function setGroups(?Group $groups): self
-    {
-        $this->groups = $groups;
-
-        return $this;
-    }
-
-    public function getIsActive(): ?bool
-    {
-        return $this->is_Active;
-    }
-
-    public function setIsActive(?bool $is_Active): self
-    {
-        $this->is_Active = $is_Active;
 
         return $this;
     }

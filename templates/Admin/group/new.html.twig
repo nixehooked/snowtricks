@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Salut admin!{% endblock %}
 
 {% block body %}
 <!-- Header starts
     ======================================= -->
 <div class="inner-page-banner">
     <div class="container text-center">
-        <h1>Creation group</h1>
+        <h1>Creation d'un groupe</h1>
     </div>
     <!-- End of .container -->
 </div>
@@ -28,7 +28,7 @@
 
     {{ include('Admin/group/_form.html.twig') }}
 
-    <a href="{{ path('group_index') }}">back to list</a>
+    <a href="{{ path('admin_group_index') }}">Revenir à la liste</a>
     </div>
 </section>
 {% endblock %}

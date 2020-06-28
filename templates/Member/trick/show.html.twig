@@ -8,6 +8,7 @@
     <div class="inner-page-banner">
         <div class="container text-center">
             <h1>{{ trick.name }}</h1>
+            <p>{{ trick.description }}</p>
         </div>
         <!-- End of .container -->
     </div>
@@ -25,9 +26,9 @@
         </svg>
 
         <div class="container">
-            <div class="align-items-center image-with-description-block">
-                    <h2>Description</h2>
-                    <p>{{ trick.description }}</p>
+            <div class="align-items-center image-with-description-block text-center">
+                    <h2>{{ trick.groups }}</h2>
+                    <p>{{ trick.groups.description }}</p>
             </div>
             <section class="align-items-center image-with-description-block">
                 <h2>Medias</h2>

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Salut admin!{% endblock %}
 
 {% block body %}
     <!-- Header starts
@@ -31,10 +31,10 @@
                 <thead class="thead-dark">
                 <tr>
                     <th>Id</th>
-                    <th>Name</th>
-                    <th>User</th>
+                    <th>Nom</th>
+                    <th>Utilisateur</th>
                     <th>Statut</th>
-                    <th>actions</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -45,12 +45,12 @@
                         <td>{{ trick.user.surname }}</td>
                         <th>{{ trick.user.surname }}</th>
                         <td>
-                            activate
+                            Activer
                         </td>
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="8">no records found</td>
+                        <td colspan="8">Pas de tricks trouvés</td>
                     </tr>
                 {% endfor %}
                 </tbody>

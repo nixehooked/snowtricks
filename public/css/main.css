@@ -142,7 +142,7 @@ Date Created: July 16, 2018
 }
 
 .theme-bg-c {
-	background-color: #ff7cb0;
+	background-color: #E8DDDA;
 }
 
 .theme-bg-d {
@@ -4225,6 +4225,13 @@ h1 {
 	.featured-project-modal .modal-content {
 		padding: 75px 75px 52px;
 	}
+
+    .avatar {
+        vertical-align: middle;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
 }
 
 /*# sourceMappingURL=main.css.map */

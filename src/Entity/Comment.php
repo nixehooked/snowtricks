@@ -39,6 +39,8 @@ class Comment
      */
     private $trick;
 
+
+
     public function __construct()
     {
         $this->created_At=new \DateTime();
@@ -96,4 +98,6 @@ class Comment
 
         return $this;
     }
+
+
 }

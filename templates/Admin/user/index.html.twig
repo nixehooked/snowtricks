@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Gestion des tricks!{% endblock %}
 
 {% block body %}
 <!-- Header starts
@@ -32,9 +32,9 @@
                 <tr>
                     <th>Id</th>
                     <th>Email</th>
-                    <th>Surname</th>
-                    <th>Name</th>
-                    <th>actions</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Plus</th>
                 </tr>
             </thead>
             <tbody>
@@ -45,12 +45,13 @@
                     <td>{{ user.surname }}</td>
                     <td>{{ user.name }}</td>
                     <td>
-                        <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
+                        <a class="btn btn-primary" href="{{ path('user_show', {'id': user.id}) }}">Voir</a>
+                        {{ include('admin/user/_delete_form.html.twig') }}
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="8">no records found</td>
+                    <td colspan="8">Aucun utilisateurs trouvé</td>
                 </tr>
             {% endfor %}
             </tbody>

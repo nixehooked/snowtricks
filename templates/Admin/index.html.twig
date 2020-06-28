@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Administration{% endblock %}
 
 {% block body %}
     <!-- Header starts
@@ -55,6 +55,21 @@
                             <div class="txt-content equalHeight">
                                 <h5>
                                     Gestion des tricks
+                                </h5>
+                            </div>
+                            <!-- End of .txt-content -->
+                        </a>
+                        <!-- End of .featured-content-block -->
+                    </div>
+                    <div class="item col-md-6">
+                        <a href="{{ path('admin_group_index') }}" class="case-study-content-block content-block text-left" >
+                            <div class="img-container">
+                                <img src="{{ asset('images/tricks.jpg') }}" alt="Project image" class="img-fluid" style="height: 200px">
+                            </div>
+                            <!-- End of .img-container -->
+                            <div class="txt-content equalHeight">
+                                <h5>
+                                    Gestion des groupes
                                 </h5>
                             </div>
                             <!-- End of .txt-content -->

@@ -10,13 +10,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+
 /**
  * @Route("admin/group")
  */
 class GroupController extends AbstractController
 {
     /**
-     * @Route("/", name="group_index", methods={"GET"})
+     * @Route("/", name="admin_group_index", methods={"GET"})
      */
     public function index(GroupRepository $groupRepository): Response
     {
@@ -39,7 +40,7 @@ class GroupController extends AbstractController
             $entityManager->persist($group);
             $entityManager->flush();
 
-            return $this->redirectToRoute('group_index');
+            return $this->redirectToRoute('admin_group_index');
         }
 
         return $this->render('Admin/group/new.html.twig', [
@@ -60,7 +61,7 @@ class GroupController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('group_index');
+            return $this->redirectToRoute('admin_group_index');
         }
 
         return $this->render('admin/group/edit.html.twig', [
@@ -80,6 +81,6 @@ class GroupController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('group_index');
+        return $this->redirectToRoute('admin_group_index');
     }
 }

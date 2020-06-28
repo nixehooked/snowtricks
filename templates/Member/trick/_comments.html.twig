@@ -1,14 +1,14 @@
 <div class="media mb-5">
     <a href="#">
-        <img class="author-thumbnail" src="{{ asset('images/news/author-thumbnail.jpg') }}" alt="author thumbnail image">
+        {% if comment.user.image is not null %}
+            <img style="margin-right: 10px; float: left" height="62" WIDTH="62" class="avatar avatar-medium" src="{{ asset('images/'~comment.user.image.source) }}" alt="avatar">
+        {% else %}
+            <img class="avatar avatar-medium" src="{{ asset('images/news/author-thumbnail.jpg') }}" alt="avatar">
+        {% endif %}
     </a>
     <div class="media-body">
-        <h5>Media heading</h5>
-        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante
-        sollicitudin. Cras purus odio, vestibulum in
-        vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-        fringilla.
-        Donec lacinia congue felis in faucibus.
+        <h5>Par : {{ comment.user.name }}</h5>
+        {{ comment.content }}
     </div>
     <!-- End of .media-body -->
 </div>

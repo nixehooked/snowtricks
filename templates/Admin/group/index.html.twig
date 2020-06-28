@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Salut l'admin!{% endblock %}
 
 {% block body %}
 <!-- Header starts
@@ -26,13 +26,13 @@
     </svg>
     <div class="container">
     <table class="table">
-        <thead>
+        <thead class="thead-dark">
             <tr>
                 <th>Id</th>
-                <th>Name</th>
+                <th>Nom</th>
                 <th>Description</th>
-                <th>Created_At</th>
-                <th>actions</th>
+                <th>Créé le</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -43,18 +43,18 @@
                 <td>{{ group.description }}</td>
                 <td>{{ group.createdAt ? group.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('group_edit', {'id': group.id}) }}">edit</a>
+                    <a href="{{ path('group_edit', {'id': group.id}) }}">Editer</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">no records found</td>
+                <td colspan="5">Pas de résultats</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('group_new') }}">Create new</a>
+    <a href="{{ path('group_new') }}">Créer un nouveau groupe</a>
     </div>
 </section>
 {% endblock %}
