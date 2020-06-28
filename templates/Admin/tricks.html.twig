@@ -31,8 +31,8 @@
                 <thead class="thead-dark">
                 <tr>
                     <th>Id</th>
-                    <th>Nom</th>
-                    <th>Utilisateur</th>
+                    <th>Nom du trick</th>
+                    <th>Créateur du trick</th>
                     <th>Statut</th>
                     <th>Action</th>
                 </tr>
@@ -43,9 +43,10 @@
                         <td>{{ trick.id }}</td>
                         <td>{{ trick.name }}</td>
                         <td>{{ trick.user.surname }}</td>
-                        <th>{{ trick.user.surname }}</th>
+                        <th>Activé</th>
                         <td>
-                            Activer
+                            <a class="btn btn-primary" href="{{ path('trick_show', {'id': trick.id}) }}">Voir</a>
+                            {{ include('member/trick/_delete_form.html.twig') }}
                         </td>
                     </tr>
                 {% else %}
