@@ -47,9 +47,18 @@
         {% if app.user %}
             {% include'Member/trick/_comment-form.html.twig' %}
         {% endif %}
+        {% if trick.comments is empty %}
+            <p>Il n'y a pas encore de commentaires associés</p>
+        {% else %}
+            {% set nb = 1 %}
         {% for comment in trick.comments %}
             {% include'Member/trick/_comments.html.twig' %}
+            {% set nb = nb+1 %}
         {% endfor %}
+            {% if trick.comments | length > 10 %}
+                <button id="loadMoreComments" class="custom-btn btn-big grad-style-ef btn-full">Charger plus de commentaires</button>
+            {% endif %}
+        {% endif %}
 
     </div>
     <!-- End of .banner -->

@@ -1,4 +1,4 @@
-<div class="media mb-5">
+<div class="media mb-5 comments" id="comment_{{ nb }}" style="{{ nb > 10 ? 'display: none;' : ''}}">
     <a href="#">
         {% if comment.user.image is not null %}
             <img style="border-radius: 10px; margin-right: 10px; float: left" height="62" WIDTH="62" class="avatar avatar-medium" src="{{ asset('images/'~comment.user.image.source) }}" alt="avatar">
@@ -12,3 +12,21 @@
     </div>
     <!-- End of .media-body -->
 </div>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        let load_more_button = $("#loadMoreComments");
+        load_more_button.on("click", () => {
+            let visible_card = $(".comments:visible");
+            let last_card_visible = $(visible_card[visible_card.length - 1]).attr("id");
+            let tmp = last_card_visible.split("_")[1];
+            for (let i = tmp++; i < tmp + 10; i++) {
+
+                let current_card = $("#comment_" + i);
+                current_card.fadeIn("slow");
+            }
+        })
+    })
+</script>
