@@ -21,7 +21,7 @@
                     {% for img in trick.image|slice(0,1) %}
                         {% set defaultsource=img.alternatif %}
                     {% endfor %}
-                    <div class="grid-item col-md-6 col-lg-4 trick {{ nb <= 6 ? 'd-block' : ''}}" id="card_{{ nb }}">
+                    <div class="grid-item col-md-6 col-lg-4 trick" id="card_{{ nb }}" style="{{ nb > 6 ? 'display: none;' : ''}}">
                         <div class="featured-content-block content-block" data-toggle="modal" data-target="#featured-project-modal">
                             <div class="img-container">
                                 <img style="height: 150px; width: 100%" src="{{ asset('images/'~defaultimage )}}" alt="{{ defaultsource }}"  class="img-fluid">
@@ -33,7 +33,7 @@
                             </h5>
                             <div class="row align-items-center ml-4">
                                 <a href="{{ path('trick_show', {'id': trick.id}) }}" class="btn btn-primary mt-2 mr-2"><i class="fa fa-eye"></i></a>
-                                {% if app.user  and app.user==trick.user %}
+                                {% if app.user  and app.user==trick.user or is_granted('ROLE_ADMIN')%}
                                     <a href="{{ path('trick_edit', {'id': trick.id}) }}" class="btn btn-secondary mt-2 mr-2"><i class="fa fa-edit"></i></a>
                                     {{ include('Member/trick/_delete_form.html.twig') }}
                                 {% endif %}
@@ -54,13 +54,11 @@
         </div>
         <!-- End of .template-showcase -->
     </div>
-{% endblock %}
-{% block javascripts %}
     <script>
-
         document.addEventListener("DOMContentLoaded", () => {
-            $("#loadMoreTrick").on("click", () => {
-                let visible_card = $(".col-md-4.d-block");
+            let load_more_button = $("#loadMoreTrick");
+            load_more_button.on("click", () => {
+                let visible_card = $(".trick:visible");
                 let last_card_visible = $(visible_card[visible_card.length - 1]).attr("id");
                 let tmp = last_card_visible.split("_")[1];
                 for (let i = tmp++; i < tmp + 6; i++) {
@@ -69,8 +67,29 @@
                     current_card.fadeIn("slow");
 
                 }
+                if (load_more_button.hasClass("grad-style-ef")) {
+                    let tmp_content = load_more_button.html();
+                    load_more_button.empty();
+                    let loader = `<div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>`;
+                    load_more_button.append(loader);
+                    setTimeout(() => {
+                        load_more_button.empty();
+                        load_more_button.append(tmp_content);
+                    }, 1500)
+                }
+                if ($(`#card_${tmp + 1}`).length === 0) {
+                    load_more_button
+                        .attr("disabled", "disabled")
+                        .css({
+                            "cursor": "initial",sy
+                            "background-color": "grey"
+                        })
+                        .removeClass("grad-style-ef")
+                }
             })
         })
 
     </script>
+{% endblock %}
+{% block javascripts %}
 {% endblock %}

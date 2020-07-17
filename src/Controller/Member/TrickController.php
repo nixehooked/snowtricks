@@ -16,12 +16,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/")
  */
 class TrickController extends AbstractController
 {
+    public function __construct()
+    {
+        $isAdmin=false;
+    }
+
     /**
      * @Route("/", name="trick_index", methods={"GET"})
      */
@@ -34,6 +40,8 @@ class TrickController extends AbstractController
 
     /**
      * @Route("trick/new", name="trick_new", methods={"GET","POST"})
+     * @IsGranted("ROLE_USER")
+     *
      */
     public function new(Request $request, ImageService $imageService, VideoService $videoService): Response
     {
@@ -68,8 +76,9 @@ class TrickController extends AbstractController
     /**
      * @Route("trick/{id}", name="trick_show", methods={"GET","POST"}, requirements={"id"="\d+"})
      */
-    public function show(Trick $trick, Request $request): Response
+    public function show($id, Request $request, TrickRepository $trickRepository): Response
     {
+        $trick= $trickRepository->getTrickById($id);
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
@@ -79,20 +88,30 @@ class TrickController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($comment);
             $entityManager->flush();
+
+            return $this->redirectToRoute('trick_show', ['id'=>$trick->getId()]);
         }
         return $this->render('Member/trick/show.html.twig', [
-            'trick' => $trick,
+            'trick' =>$trick,
             'form'=>$form->createView()
         ]);
     }
 
     /**
      * @Route("trick/{id}/edit", name="trick_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_USER")
      */
     public function edit(Request $request, Trick $trick, ImageService $imageService, VideoService $videoService): Response
     {
+        $user=$this->getUser();
 
-        if($this->getUser()!=$trick->getUser()) {
+        foreach ($user->getRoles() as $role){
+            if ($role=='ROLE_ADMIN'){
+                $isAdmin=true;
+            }
+        }
+
+        if($this->getUser()!=$trick->getUser() AND !$isAdmin) {
             throw $this->createNotFoundException('Vous ne pouvez pas modifier ce trick');
         }
         else{
@@ -122,6 +141,7 @@ class TrickController extends AbstractController
 
     /**
      * @Route("trick/{id}", name="trick_delete", methods={"DELETE"})
+     * @IsGranted("ROLE_USER")
      */
     public function delete(Request $request, Trick $trick): Response
     {
@@ -138,6 +158,7 @@ class TrickController extends AbstractController
     }
     /**
      * @Route("image/{id}/delete", name="imaage_delete")
+     * @IsGranted("ROLE_USER")
      */
     public function deleteImage(Request $request, Image $image): Response
     {

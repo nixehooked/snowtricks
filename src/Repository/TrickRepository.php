@@ -28,6 +28,16 @@ class TrickRepository extends ServiceEntityRepository
             ->leftJoin('t.video','v')->addSelect('v')
             ->getQuery()->getResult();
     }
+    public function getTrickById($id){
+        return $this->createQueryBuilder('t')
+            ->where('t.id=:id')->setParameter('id',$id)
+            ->leftJoin('t.user','u')->addSelect('u')
+            ->leftJoin('t.comments', 'c')->addSelect('c')
+            ->leftJoin('t.image','i')->addSelect('i')
+            ->leftJoin('t.video','v')->addSelect('v')
+            ->leftJoin('t.groups','g')->addSelect('g')
+            ->getQuery()->getOneOrNullResult();
+    }
 
     // /**
     //  * @return Trick[] Returns an array of Trick objects

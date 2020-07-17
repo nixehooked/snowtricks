@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\User;
 use App\Repository\TrickRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,5 +26,15 @@ class AdminController extends AbstractController
         return $this->render('Admin/tricks.html.twig', [
             'tricks' => $trickRepository->findAll(),
         ]);
+    }
+    /**
+     * @Route("admin/user/promote/{id}", name="promote_admin", methods={"GET"})
+     */
+    public function promoteadmin(User $user): Response
+    {
+        $user->setRoles(['roles' => 'ROLE_ADMIN']);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->flush();
+        return $this->redirectToRoute('admin_user_index');
     }
 }

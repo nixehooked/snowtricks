@@ -25,7 +25,16 @@
         />
     </svg>
     <div class="container">
-        <a href="" class="btn btn-big btn-secondary float-right">Désigner ADMIN</a>
+        {% set isAdmin=false %}
+        {% for role in user.roles  %}
+            {% if role=='ROLE_ADMIN' %}
+                {% set isAdmin=true %}
+            {% endif %}
+        {% endfor %}
+        {% if not isAdmin %}
+            <a href="{{ path('promote_admin',{'id':user.id}) }}" class="btn btn-big btn-secondary float-right">Désigner ADMIN</a>
+        {% endif %}
+
         <table class="table table-hover table-responsive-sm table-bordered">
             <tbody>
                 <tr>
