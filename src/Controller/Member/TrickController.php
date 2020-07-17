@@ -8,6 +8,7 @@ use App\Entity\Trick;
 use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
+use App\Services\CommentService;
 use App\Services\ImageService;
 use App\Services\VideoService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -76,19 +77,14 @@ class TrickController extends AbstractController
     /**
      * @Route("trick/{id}", name="trick_show", methods={"GET","POST"}, requirements={"id"="\d+"})
      */
-    public function show($id, Request $request, TrickRepository $trickRepository): Response
+    public function show($id, Request $request, TrickRepository $trickRepository,CommentService $commentService): Response
     {
-        $trick= $trickRepository->getTrickById($id);
         $comment = new Comment();
+        $trick= $trickRepository->getTrickById($id);
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
-        $user=$this->getUser();
         if ($form->isSubmitted() && $form->isValid()) {
-            $comment->setTrick($trick)->setUser($user);
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($comment);
-            $entityManager->flush();
-
+            $commentService->addComment($trick, $comment);
             return $this->redirectToRoute('trick_show', ['id'=>$trick->getId()]);
         }
         return $this->render('Member/trick/show.html.twig', [
