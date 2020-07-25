@@ -26,11 +26,12 @@ class TrickRepository extends ServiceEntityRepository
             ->leftJoin('t.groups','g')->addSelect('g')
             ->leftJoin('t.image','i')->addSelect('i')
             ->leftJoin('t.video','v')->addSelect('v')
+            ->orderBy('t.id','DESC')
             ->getQuery()->getResult();
     }
-    public function getTrickById($id){
+    public function getTrickBySlug($slug){
         return $this->createQueryBuilder('t')
-            ->where('t.id=:id')->setParameter('id',$id)
+            ->where('t.slug=:slug')->setParameter('slug',$slug)
             ->leftJoin('t.user','u')->addSelect('u')
             ->leftJoin('t.comments', 'c')->addSelect('c')
             ->leftJoin('t.image','i')->addSelect('i')

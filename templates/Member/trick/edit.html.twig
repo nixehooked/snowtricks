@@ -9,6 +9,11 @@
         </div>
         <!-- End of .container -->
     </div>
+    {% for message in app.flashes('notice') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
 
     {{ include('Member/trick/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 

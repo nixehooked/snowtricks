@@ -1,12 +1,15 @@
 <div class="col-6">
 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner">
-
+        {% if trick.image and trick.video is empty  %}
+        <p>Il n'y a pas encore de médias associés</p>
+        {% else %}
         {% for i, image in trick.image %}
             <div class="carousel-item {% if i==0 %}active{% endif %}">
                 <img style="padding-bottom: 20px" class="d-block w-100" src="{{ asset('images/'~image) }}" alt="First slide">
             </div>
         {% endfor %}
+        {% endif %}
 
     </div>
     <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">

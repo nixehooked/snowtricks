@@ -7,10 +7,12 @@ use App\Entity\Image;
 use App\Entity\Trick;
 use App\Form\CommentType;
 use App\Form\TrickType;
+use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
 use App\Services\CommentService;
 use App\Services\ImageService;
 use App\Services\VideoService;
+use Doctrine\ORM\Mapping\Id;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
  * @Route("/")
@@ -44,7 +47,7 @@ class TrickController extends AbstractController
      * @IsGranted("ROLE_USER")
      *
      */
-    public function new(Request $request, ImageService $imageService, VideoService $videoService): Response
+    public function new(Id $id,Request $request, ImageService $imageService, VideoService $videoService, SluggerInterface $slugger): Response
     {
         $trick = new Trick();
         $user=$this->getUser();
@@ -60,8 +63,15 @@ class TrickController extends AbstractController
             }
             $videoService->addVideo($trick, $entityManager);
             $trick->setUser($user);
+            $title= mb_strtolower($trick->getName(),'UTF-8');
+            $slug= $slugger->slug($title, '-');
+            $trick->setSlug($slug);
             $entityManager->persist($trick);
             $entityManager->flush();
+            $this->addFlash(
+                'notice',
+                'Trick sauvegardé avec succès!'
+            );
 
             return $this->redirectToRoute('trick_index');
         }
@@ -75,21 +85,22 @@ class TrickController extends AbstractController
 
 
     /**
-     * @Route("trick/{id}", name="trick_show", methods={"GET","POST"}, requirements={"id"="\d+"})
+     * @Route("trick/{slug}", name="trick_show", methods={"GET","POST"})
      */
-    public function show($id, Request $request, TrickRepository $trickRepository,CommentService $commentService): Response
+    public function show($slug, Request $request, TrickRepository $trickRepository,CommentService $commentService, CommentRepository $commentRepository): Response
     {
         $comment = new Comment();
-        $trick= $trickRepository->getTrickById($id);
+        $trick= $trickRepository->getTrickBySlug($slug);
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $commentService->addComment($trick, $comment);
-            return $this->redirectToRoute('trick_show', ['id'=>$trick->getId()]);
+            return $this->redirectToRoute('trick_show', ['slug'=>$trick->getSlug()]);
         }
         return $this->render('Member/trick/show.html.twig', [
             'trick' =>$trick,
-            'form'=>$form->createView()
+            'comments'=>$commentRepository->getCommentsByTricks($trick),
+            'form'=>$form->createView(),
         ]);
     }
 
@@ -123,6 +134,10 @@ class TrickController extends AbstractController
                 $videoService->addVideo($trick, $entityManager);
                 $entityManager->persist($trick);
                 $entityManager->flush();
+                $this->addFlash(
+                    'notice',
+                    'Trick modifié avec succès!'
+                );
                 return $this->redirectToRoute('trick_index');
 
             }

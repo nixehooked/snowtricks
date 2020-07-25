@@ -7,7 +7,7 @@
         {% endif %}
     </a>
     <div class="media-body">
-        <h5>Par : {{ comment.user.name }}</h5>
+        <h5>{{ comment.user.name }} {{ comment.user.surname }} <small class="text-muted">({{ comment.createdAt | date('d/m/Y à H:i') }})</small></h5>
         {{ comment.content }}
     </div>
     <!-- End of .media-body -->

@@ -51,12 +51,12 @@
             <p>Il n'y a pas encore de commentaires associés</p>
         {% else %}
             {% set nb = 1 %}
-        {% for comment in trick.comments %}
+        {% for comment in comments %}
             {% include'Member/trick/_comments.html.twig' %}
             {% set nb = nb+1 %}
         {% endfor %}
             {% if trick.comments | length > 10 %}
-                <button id="loadMoreComments" class="custom-btn btn-big grad-style-ef btn-full">Charger plus de commentaires</button>
+                <button id="loadMoreComments" class="custom-btn btn-big grad-style-ef btn-full" style="margin-bottom: 20px">Charger plus de commentaires</button>
             {% endif %}
         {% endif %}
 
