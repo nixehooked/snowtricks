@@ -6,7 +6,7 @@
 <p>Installation de GIT :</p>
 <pre><code>- GIT (https://git-scm.com/downloads) </code></pre>
 <p>Une fois GIT installé, il faudra vous placer dans le répertoire de votre choix puis exécuté la commande suivante :</p>
-<pre><code>https://github.com/nixehooked/snowtricks.git</code></pre>
+<pre><code>- git clone https://github.com/nixehooked/snowtricks.git</code></pre>
 <p>Le projet sera automatiquement copié dans le répertoire ciblé.</p>
 <h2><strong>Configuration des variables d'environnement</strong></h2>
 <p>Configurez les variables d'environnement comme la connexion à la base de données dans le fichier env.local qui sera créé à la racine du projet en copiant le fichier .env. Vous pourrez ensuite renseigner les identifiants de votre base de données en suivant le modèle ci-dessous.</p>
