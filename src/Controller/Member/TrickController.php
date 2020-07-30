@@ -47,7 +47,7 @@ class TrickController extends AbstractController
      * @IsGranted("ROLE_USER")
      *
      */
-    public function new(Id $id,Request $request, ImageService $imageService, VideoService $videoService, SluggerInterface $slugger): Response
+    public function new(Request $request, ImageService $imageService, VideoService $videoService, SluggerInterface $slugger): Response
     {
         $trick = new Trick();
         $user=$this->getUser();

@@ -33,8 +33,8 @@
                             </div>
                             <!-- End of .img-container -->
                             <h5 class="equalHeight">
-                                <span class="content-block__sub-title">{{ trick.name }}</span>
                                 {{ trick.name }}
+                                <span class="content-block__sub-title">{{ trick.groups }}</span>
                             </h5>
                             <div class="row align-items-center ml-4">
                                 <a href="{{ path('trick_show', {'slug': trick.slug}) }}" class="btn btn-primary mt-2 mr-2"><i class="fa fa-eye"></i></a>
