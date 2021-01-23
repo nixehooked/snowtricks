@@ -1,5 +1,14 @@
 {
+    "fakerphp/faker": {
+        "version": "v1.13.0"
+    },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.3"
+    },
     "php": {
         "version": "7.4"
+    },
+    "symfony/proxy-manager-bridge": {
+        "version": "v5.2.1"
     }
 }
